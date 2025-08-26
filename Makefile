@@ -11,6 +11,8 @@ TARGET = $(BIN_DIR)/threadpool
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
+run: clean all
+
 all: $(TARGET)
 
 $(TARGET): $(OBJ_FILES) | $(BIN_DIR)
