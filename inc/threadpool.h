@@ -1,8 +1,6 @@
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <pthread.h>
 
 #define MAX_THREADS 8

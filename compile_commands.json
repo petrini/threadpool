@@ -6,7 +6,27 @@
       "-Wextra",
       "-Wpedantic",
       "-Werror",
-      "-Iinclude",
+      "-Iinc",
+      "-g",
+      "-pthread",
+      "-D_GNU_SOURCE",
+      "-c",
+      "-o",
+      "obj/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool",
+    "file": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/src/main.c",
+    "output": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/obj/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/lib64/ccache/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-Iinc",
       "-g",
       "-pthread",
       "-D_GNU_SOURCE",

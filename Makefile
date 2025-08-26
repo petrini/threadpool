@@ -1,9 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -Werror -Iinclude -g -pthread -D_GNU_SOURCE
+CFLAGS = -Wall -Wextra -Wpedantic -Werror -I$(INC_DIR) -g -pthread -D_GNU_SOURCE
 
 SRC_DIR = src
 OBJ_DIR = obj
-INCLUDE_DIR = include
+INC_DIR = inc
 BIN_DIR = bin
 
 TARGET = $(BIN_DIR)/threadpool
