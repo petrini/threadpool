@@ -2,16 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "thread_pool.h"
+#include "threadpool.h"
 
 void *thread_function(void *param)
 {
-    thread_pool_t *pool = (thread_pool_t *)param;
+    threadpool_t *pool = (threadpool_t *)param;
     printf("%d\n", pool->queued);
     return NULL;
 }
 
-void thread_pool_init(thread_pool_t *pool)
+void threadpool_init(threadpool_t *pool)
 {
     pool->queued = 0;
     pool->queue_front = 0;

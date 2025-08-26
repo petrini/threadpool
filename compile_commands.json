@@ -12,31 +12,11 @@
       "-D_GNU_SOURCE",
       "-c",
       "-o",
-      "obj/main.o",
-      "src/main.c"
+      "obj/threadpool.o",
+      "src/threadpool.c"
     ],
     "directory": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool",
-    "file": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/src/main.c",
-    "output": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/obj/main.o"
-  },
-  {
-    "arguments": [
-      "/usr/lib64/ccache/gcc",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-Werror",
-      "-Iinclude",
-      "-g",
-      "-pthread",
-      "-D_GNU_SOURCE",
-      "-c",
-      "-o",
-      "obj/thread_pool.o",
-      "src/thread_pool.c"
-    ],
-    "directory": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool",
-    "file": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/src/thread_pool.c",
-    "output": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/obj/thread_pool.o"
+    "file": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/src/threadpool.c",
+    "output": "/home/achu/Documents/Projects/zero-to-hero-c-programming/thread_pool/obj/threadpool.o"
   }
 ]

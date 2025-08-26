@@ -1,5 +1,5 @@
-#ifndef THREAD_POOL_H
-#define THREAD_POOL_H
+#ifndef THREADPOOL_H
+#define THREADPOOL_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,11 +24,11 @@ typedef struct
     int queue_front;
     int queue_back;
     int stop;
-} thread_pool_t;
+} threadpool_t;
 
 void *thread_function(void *param);
 
-void thread_pool_init(thread_pool_t *pool);
+void threadpool_init(threadpool_t *pool);
 
 #endif
 
