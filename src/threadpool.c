@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "threadpool.h"
+#include "../inc/threadpool.h"
 
 void *thread_function(void *param)
 {
