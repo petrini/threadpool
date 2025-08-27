@@ -29,14 +29,34 @@ void threadpool_init(threadpool_t *pool)
 
 void threadpool_destroy(threadpool_t* pool)
 {
-    printf("%d\n", pool->queued);
+    pthread_mutex_destroy(&(pool->lock));
+    pthread_cond_destroy(&(pool->notify));
+
+    for(int i = 0; i < MAX_THREADS; i++)
+    {
+        pthread_exit(&(pool->threads[i]));
+    }
 }
 
 void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
 {
-    printf("%d\n", pool->queued);
-    printf("%d\n", *(int *)arg);
-    function(NULL);
+    if(pool->queued == MAX_TASKS)
+    {
+        fprintf(stderr, "Cannot add task: queue full\n");
+        return;
+    }
+
+    if(pool->queue_front < MAX_TASKS - 1)
+    {
+        pool->queue_front++;
+    }
+    else
+    {
+        pool->queue_front = 0;
+    }
+    pool->queued++;
+    pool->task_queue[pool->queue_front].fn = function;
+    pool->task_queue[pool->queue_front].arg = arg;
 }
 
 void example_task(void* arg)
