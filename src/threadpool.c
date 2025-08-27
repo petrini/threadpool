@@ -1,19 +1,42 @@
+#include <stdbool.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "../inc/threadpool.h"
 
-void *thread_function(void *param)
+void* thread_function(void* arg)
 {
-    threadpool_t *pool = (threadpool_t *)param;
-    printf("%d\n", pool->queued);
-    return NULL;
+    threadpool_t* pool = (threadpool_t*)arg;
+
+    while(true)
+    {
+        pthread_mutex_lock(&(pool->lock));
+
+        while(pool->queue_size == 0 && !pool->stop)
+        {
+            pthread_cond_wait(&(pool->notify), &(pool->lock));
+        }
+
+        if(pool->stop)
+        {
+            pthread_mutex_unlock(&(pool->lock));
+            pthread_exit(NULL);
+        }
+
+        task_t task = pool->task_queue[pool->queue_front];
+        pool->queue_front = (pool->queue_front + 1) % MAX_TASKS;
+        pool->queue_size--;
+
+        pthread_mutex_unlock(&(pool->lock));
+
+        (*(task.function))(task.arg);
+    }
 }
 
 void threadpool_init(threadpool_t *pool)
 {
-    pool->queued = 0;
+    pool->queue_size = 0;
     pool->queue_front = 0;
     pool->queue_back = 0;
     pool->stop = 0;
@@ -29,38 +52,34 @@ void threadpool_init(threadpool_t *pool)
 
 void threadpool_destroy(threadpool_t* pool)
 {
-    pthread_mutex_destroy(&(pool->lock));
-    pthread_cond_destroy(&(pool->notify));
+    pthread_mutex_lock(&(pool->lock));
+    pool->stop = true;
+    pthread_cond_broadcast(&(pool->notify));
+    pthread_mutex_unlock(&(pool->lock));
+
 
     for(int i = 0; i < MAX_THREADS; i++)
     {
-        pthread_exit(&(pool->threads[i]));
+        pthread_join(pool->threads[i], NULL);
     }
+
+    pthread_mutex_destroy(&(pool->lock));
+    pthread_cond_destroy(&(pool->notify));
 }
 
 void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
 {
-    if(pool->queued == MAX_TASKS)
+    if(pool->queue_size == MAX_TASKS)
     {
         fprintf(stderr, "Cannot add task: queue full\n");
         return;
     }
 
-    if(pool->queue_front < MAX_TASKS - 1)
-    {
-        pool->queue_front++;
-    }
-    else
-    {
-        pool->queue_front = 0;
-    }
-    pool->queued++;
-    pool->task_queue[pool->queue_front].fn = function;
+    pool->queue_front = (pool->queue_front + 1) % MAX_TASKS;
+    pool->queue_size++;
+    pool->task_queue[pool->queue_front].function = function;
     pool->task_queue[pool->queue_front].arg = arg;
-}
 
-void example_task(void* arg)
-{
-    printf("%d\n", *(int *)arg);
+    pthread_cond_signal(&(pool->notify));
 }
 

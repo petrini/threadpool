@@ -1,6 +1,7 @@
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 
+#include <stdbool.h>
 #include <pthread.h>
 
 #define MAX_THREADS 8
@@ -8,7 +9,7 @@
 
 typedef struct
 {
-    void (* fn) (void *task);
+    void (* function) (void *task);
     void *arg;
 } task_t;
 
@@ -18,23 +19,19 @@ typedef struct
     pthread_cond_t notify;
     pthread_t threads[MAX_THREADS];
     task_t task_queue[MAX_TASKS];
-    int queued;
+    int queue_size;
     int queue_front;
     int queue_back;
-    int stop;
+    bool stop;
 } threadpool_t;
-/*
+
 void *thread_function(void *param);
 
-void threadpool_init(threadpool_t *pool);
-*/
 void threadpool_init(threadpool_t* pool);
 
 void threadpool_destroy(threadpool_t* pool);
 
 void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg);
-
-void example_task(void* arg);
 
 #endif
 
