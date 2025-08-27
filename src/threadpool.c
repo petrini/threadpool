@@ -27,3 +27,20 @@ void threadpool_init(threadpool_t *pool)
     }
 }
 
+void threadpool_destroy(threadpool_t* pool)
+{
+    printf("%d\n", pool->queued);
+}
+
+void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
+{
+    printf("%d\n", pool->queued);
+    printf("%d\n", *(int *)arg);
+    function(NULL);
+}
+
+void example_task(void* arg)
+{
+    printf("%d\n", *(int *)arg);
+}
+

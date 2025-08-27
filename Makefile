@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -Werror -I$(INC_DIR) -g -pthread -D_GNU_SOURCE
+CFLAGS = -Wall -Wextra -Wpedantic -Werror -Iinc -g -pthread -D_GNU_SOURCE
 
 SRC_DIR = src
 OBJ_DIR = obj

@@ -23,10 +23,18 @@ typedef struct
     int queue_back;
     int stop;
 } threadpool_t;
-
+/*
 void *thread_function(void *param);
 
 void threadpool_init(threadpool_t *pool);
+*/
+void threadpool_init(threadpool_t* pool);
+
+void threadpool_destroy(threadpool_t* pool);
+
+void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg);
+
+void example_task(void* arg);
 
 #endif
 
