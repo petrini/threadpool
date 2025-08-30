@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <pthread.h>
 
-#define MAX_THREADS 8
-#define QUEUE_SIZE 128
+#define MAX_THREADS 16
+#define QUEUE_SIZE 100
 
 typedef struct
 {
