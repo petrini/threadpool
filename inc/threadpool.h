@@ -5,7 +5,7 @@
 #include <pthread.h>
 
 #define MAX_THREADS 8
-#define MAX_TASKS 128
+#define QUEUE_SIZE 128
 
 typedef struct
 {
@@ -18,7 +18,7 @@ typedef struct
     pthread_mutex_t lock;
     pthread_cond_t notify;
     pthread_t threads[MAX_THREADS];
-    task_t task_queue[MAX_TASKS];
+    task_t task_queue[QUEUE_SIZE];
     int queue_size;
     int queue_front;
     int queue_back;

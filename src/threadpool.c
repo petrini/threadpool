@@ -25,7 +25,7 @@ void* thread_function(void* arg)
         }
 
         task_t task = pool->task_queue[pool->queue_front];
-        pool->queue_front = (pool->queue_front + 1) % MAX_TASKS;
+        pool->queue_front = (pool->queue_front + 1) % QUEUE_SIZE;
         pool->queue_size--;
 
         pthread_mutex_unlock(&(pool->lock));
@@ -71,7 +71,7 @@ void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
 {
     pthread_mutex_lock(&(pool->lock));
 
-    if(pool->queue_size == MAX_TASKS)
+    if(pool->queue_size == QUEUE_SIZE)
     {
         fprintf(stderr, "Cannot add task: queue full\n");
     }
@@ -79,7 +79,7 @@ void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
     {
         pool->task_queue[pool->queue_back].function = function;
         pool->task_queue[pool->queue_back].arg = arg;
-        pool->queue_back = (pool->queue_back + 1) % MAX_TASKS;
+        pool->queue_back = (pool->queue_back + 1) % QUEUE_SIZE;
         pool->queue_size++;
         pthread_cond_signal(&(pool->notify));
     }
