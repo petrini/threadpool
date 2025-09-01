@@ -13,7 +13,7 @@ void* thread_function(void* arg)
     {
         pthread_mutex_lock(&(pool->lock));
 
-        while(pool->queue_size == 0 && !pool->stop)
+        while(pool->queued == 0 && !pool->stop)
         {
             pthread_cond_wait(&(pool->notify), &(pool->lock));
         }
@@ -26,17 +26,17 @@ void* thread_function(void* arg)
 
         task_t task = pool->task_queue[pool->queue_front];
         pool->queue_front = (pool->queue_front + 1) % QUEUE_SIZE;
-        pool->queue_size--;
+        pool->queued--;
 
         pthread_mutex_unlock(&(pool->lock));
 
-        (*(task.function))(task.arg);
+        (*(task.fn))(task.arg);
     }
 }
 
 void threadpool_init(threadpool_t *pool)
 {
-    pool->queue_size = 0;
+    pool->queued = 0;
     pool->queue_front = 0;
     pool->queue_back = 0;
     pool->stop = 0;
@@ -44,7 +44,7 @@ void threadpool_init(threadpool_t *pool)
     pthread_mutex_init(&(pool->lock), NULL);
     pthread_cond_init(&(pool->notify), NULL);
 
-    for(int i = 0; i < MAX_THREADS; i++)
+    for(int i = 0; i < THREADS; i++)
     {
         pthread_create(&(pool->threads[i]), NULL, thread_function, pool);
     }
@@ -58,7 +58,7 @@ void threadpool_destroy(threadpool_t* pool)
     pthread_mutex_unlock(&(pool->lock));
 
 
-    for(int i = 0; i < MAX_THREADS; i++)
+    for(int i = 0; i < THREADS; i++)
     {
         pthread_join(pool->threads[i], NULL);
     }
@@ -71,16 +71,16 @@ void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
 {
     pthread_mutex_lock(&(pool->lock));
 
-    if(pool->queue_size == QUEUE_SIZE)
+    if(pool->queued == QUEUE_SIZE)
     {
         fprintf(stderr, "Cannot add task: queue full\n");
     }
     else
     {
-        pool->task_queue[pool->queue_back].function = function;
+        pool->task_queue[pool->queue_back].fn = function;
         pool->task_queue[pool->queue_back].arg = arg;
         pool->queue_back = (pool->queue_back + 1) % QUEUE_SIZE;
-        pool->queue_size++;
+        pool->queued++;
         pthread_cond_signal(&(pool->notify));
     }
 
