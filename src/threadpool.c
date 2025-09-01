@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include <pthread.h>
-#include <stdio.h>
+// #include <stdio.h>
 #include <stdlib.h>
 
 #include "../inc/threadpool.h"
@@ -70,17 +70,20 @@ void threadpool_destroy(threadpool_t* pool)
 void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
 {
     pthread_mutex_lock(&(pool->lock));
-
+/*
     if(pool->queued == QUEUE_SIZE)
     {
         fprintf(stderr, "Cannot add task: queue full\n");
     }
     else
+*/
+    if(pool->queued < QUEUE_SIZE)
     {
         pool->task_queue[pool->queue_back].fn = function;
         pool->task_queue[pool->queue_back].arg = arg;
         pool->queue_back = (pool->queue_back + 1) % QUEUE_SIZE;
         pool->queued++;
+//        printf("Added task, queued: %d\n", pool->queued);
         pthread_cond_signal(&(pool->notify));
     }
 
