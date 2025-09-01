@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
        threadpool_add_task(&pool, placeholder_task, &task_num[i]);
     }
 
-    sleep(15);
+    sleep(5);
 
     free((void*)task_num);
     threadpool_destroy(&pool);
