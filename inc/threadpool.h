@@ -10,7 +10,7 @@
 
 #define THREADS 16
 
-#define QUEUE_SIZE 100
+#define QUEUE_SIZZ 100
 
 
 
@@ -32,7 +32,7 @@ typedef struct {
 
   pthread_t threads[THREADS];
 
-  task_t task_queue[QUEUE_SIZE];
+  task_t task_queue[QUEUE_SIZZ];
 
   int queued;
 

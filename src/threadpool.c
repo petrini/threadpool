@@ -26,7 +26,7 @@ void* thread_function(void* arg)
         }
 
         task_t task = pool->task_queue[pool->queue_front];
-        pool->queue_front = (pool->queue_front + 1) % QUEUE_SIZE;
+        pool->queue_front = (pool->queue_front + 1) % QUEUE_SIZZ;
         pool->queued--;
 
         pthread_mutex_unlock(&(pool->lock));
@@ -73,10 +73,10 @@ void threadpool_destroy(threadpool_t* pool)
 
 void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
 {
-    printf("threadpool_add_task queued:%d arg:%d\n", pool->queued, *(int*)arg);
+    printf("threadpool_add_task queued:%d arg:%d", pool->queued, *(int*)arg);
     pthread_mutex_lock(&(pool->lock));
 
-    if(pool->queued == QUEUE_SIZE)
+    if(pool->queued == QUEUE_SIZZ)
     {
         fprintf(stderr, "Cannot add task: queue full\n");
     }
@@ -84,7 +84,7 @@ void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
     {
         pool->task_queue[pool->queue_back].fn = function;
         pool->task_queue[pool->queue_back].arg = arg;
-        pool->queue_back = (pool->queue_back + 1) % QUEUE_SIZE;
+        pool->queue_back = (pool->queue_back + 1) % QUEUE_SIZZ;
         pool->queued++;
         pthread_cond_signal(&(pool->notify));
     }
