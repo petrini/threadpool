@@ -7,6 +7,7 @@
 
 void* thread_function(void* arg)
 {
+    printf("thread_function: %d\n", ((threadpool_t*)arg)->queued);
     threadpool_t* pool = (threadpool_t*)arg;
 
     while(true)
@@ -36,6 +37,8 @@ void* thread_function(void* arg)
 
 void threadpool_init(threadpool_t *pool)
 {
+    printf("threadpool_init queued:%d front:%d back:%d", pool->queued, pool->queue_front, pool->queue_back);
+
     pool->queued = 0;
     pool->queue_front = 0;
     pool->queue_back = 0;
@@ -52,6 +55,7 @@ void threadpool_init(threadpool_t *pool)
 
 void threadpool_destroy(threadpool_t* pool)
 {
+    printf("threadpool_destroy");
     pthread_mutex_lock(&(pool->lock));
     pool->stop = true;
     pthread_cond_broadcast(&(pool->notify));
