@@ -4,6 +4,15 @@
 
 #include "threadpool.h"
 
+void example_task(void* arg)
+{
+    int* num = (int*)arg;
+    for(int i = 0; i < *num; i++)
+    {
+        usleep(100);
+    }
+}
+
 void placeholder_task(void *arg)
 {
     int* num = (int*)arg;
@@ -33,10 +42,10 @@ int main(int argc, char *argv[])
     for(int i = 0; i < task_amount; i++)
     {
        task_num[i] = i + 1;
-       threadpool_add_task(&pool, placeholder_task, &task_num[i]);
+       threadpool_add_task(&pool, example_task, &task_num[i]);
     }
 
-    sleep(15);
+    sleep(10);
 
     free((void*)task_num);
     threadpool_destroy(&pool);
