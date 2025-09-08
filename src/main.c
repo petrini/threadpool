@@ -8,7 +8,7 @@ void placeholder_task(void *arg)
 {
     int* num = (int*)arg;
     printf("Processing task %d\n", *num);
-    sleep(1);
+    //sleep(1);
 }
 
 int main(int argc, char *argv[])

@@ -73,6 +73,7 @@ void threadpool_destroy(threadpool_t* pool)
 
 void threadpool_add_task(threadpool_t* pool, void (*function)(void*), void* arg)
 {
+    printf("threadpool_add_task queued:%d arg:%d", pool->queued, *(int*)arg);
     pthread_mutex_lock(&(pool->lock));
 
     if(pool->queued == QUEUE_SIZE)
